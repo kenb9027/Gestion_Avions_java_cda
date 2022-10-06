@@ -33,10 +33,14 @@ public class Main {
 
         airportService.addAirport("Roissy Charles de Gaulle");
         airportService.addAirport("Heatrhow");
-        airportService.addAirport("Mérignac Bordeaux");
+        airportService.addAirport("Orly");
+        airportService.addAirport("St-Jacques/Rennes");
+        airportService.addAirport("Mérignac/Bordeaux");
         companyService.addCompany("Air France");
         companyService.addCompany("RyanAir");
         companyService.addCompany("easyJet");
+        companyService.addCompany("KLM");
+        companyService.addCompany("British Airways");
         System.out.println(airports);
         System.out.println(companies);
 
