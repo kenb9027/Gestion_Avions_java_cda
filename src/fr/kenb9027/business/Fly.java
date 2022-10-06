@@ -1,4 +1,4 @@
-package fr.kenb9027.buisiness;
+package fr.kenb9027.business;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

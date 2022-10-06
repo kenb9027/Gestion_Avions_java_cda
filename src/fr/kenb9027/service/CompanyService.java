@@ -1,6 +1,6 @@
 package fr.kenb9027.service;
 
-import fr.kenb9027.buisiness.Company;
+import fr.kenb9027.business.Company;
 
 import java.util.ArrayList;
 

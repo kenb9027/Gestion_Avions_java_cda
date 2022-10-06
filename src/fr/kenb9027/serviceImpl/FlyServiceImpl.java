@@ -1,8 +1,6 @@
 package fr.kenb9027.serviceImpl;
 
-import fr.kenb9027.buisiness.Airport;
-import fr.kenb9027.buisiness.Company;
-import fr.kenb9027.buisiness.Fly;
+import fr.kenb9027.business.Fly;
 import fr.kenb9027.service.AirportService;
 import fr.kenb9027.service.CompanyService;
 import fr.kenb9027.service.FlyService;
@@ -19,20 +17,17 @@ public class FlyServiceImpl implements FlyService {
 
 
     @Override
-    public Fly addFly(float price, Company company, LocalDateTime hourDeparture, LocalDateTime hourArrival, Airport airportDeparture, Airport airportArrival) {
+    public Fly addFly(float price, String companyId, LocalDateTime hourDeparture, LocalDateTime hourArrival, String airportDepartureId, String airportArrivalId) {
 
         Fly newFly = new Fly();
-
         newFly.setPrice(price);
-        newFly.setCompany(companyService.getCompany(company.getId()));
-        newFly.setAirportDeparture(airportService.getAirport(airportDeparture.getId()));
-        newFly.setAirportArrival(airportService.getAirport(airportArrival.getId()));
+        newFly.setCompany(companyService.getCompany(companyId));
+        newFly.setAirportDeparture(airportService.getAirport(airportDepartureId));
+        newFly.setAirportArrival(airportService.getAirport(airportArrivalId));
         newFly.setHourDeparture(hourDeparture);
         newFly.setHourArrival(hourArrival);
 
-
         flies.add(newFly);
-
         return newFly;
     }
 
@@ -44,7 +39,6 @@ public class FlyServiceImpl implements FlyService {
                 return fly;
             }
         }
-
         return null;
     }
 

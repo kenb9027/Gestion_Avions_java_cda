@@ -1,28 +1,27 @@
-package fr.kenb9027.buisiness;
+package fr.kenb9027.business;
 
 import java.util.ArrayList;
 
-public class Airport {
-
+public class Company {
 
     private String id;
     private String name;
 
-    private ArrayList<Fly> flies;
+    private ArrayList<Fly> flies ;
 
-    public Airport() {
+    public Company() {
         super();
         this.flies = new ArrayList<Fly>();
     }
 
-    public Airport(String name) {
+    public Company(String name) {
         this();
         this.name = name;
     }
 
     @Override
     public String toString() {
-        return name + " Airport";
+        return "Company " + name ;
     }
 
     public String getId() {

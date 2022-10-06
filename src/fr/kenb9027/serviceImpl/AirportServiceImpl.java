@@ -1,6 +1,6 @@
 package fr.kenb9027.serviceImpl;
 
-import fr.kenb9027.buisiness.Airport;
+import fr.kenb9027.business.Airport;
 import fr.kenb9027.service.AirportService;
 
 import java.util.ArrayList;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class AirportServiceImpl implements AirportService {
 
     private static ArrayList<Airport> airports = new ArrayList<Airport>() ;
-
 
     @Override
     public Airport getAirport(String id) {
@@ -18,17 +17,14 @@ public class AirportServiceImpl implements AirportService {
                 return airport;
             }
         }
-
         return null;
     }
-
 
     @Override
     public Airport addAirport(String name) {
 
         Airport newAirport = new Airport(name);
         airports.add(newAirport);
-
         return newAirport ;
     }
 
@@ -36,5 +32,4 @@ public class AirportServiceImpl implements AirportService {
     public ArrayList<Airport> getAirports() {
         return airports;
     }
-
 }
