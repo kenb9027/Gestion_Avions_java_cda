@@ -1,10 +1,11 @@
 package fr.kenb9027.buisiness;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Fly {
 
-    private long counter = 0L;
+    private static long counter = 0L;
     private long number;
     private float price ;
     private Company company;
@@ -14,10 +15,10 @@ public class Fly {
     private Airport airportDeparture;
     private Airport airportArrival;
 
-    public Fly(long counter) {
+    public Fly() {
         super();
-        this.number = counter;
-        ++counter;
+        this.number = ++counter;
+
     }
 
     public Fly(
@@ -27,14 +28,19 @@ public class Fly {
             LocalDateTime hourArrival,
             Airport airportDeparture,
             Airport airportArrival) {
-        //this();
+        this();
         this.price = price;
         this.company = company;
         this.hourDeparture = hourDeparture;
         this.hourArrival = hourArrival;
         this.airportDeparture = airportDeparture;
         this.airportArrival = airportArrival;
+
+        this.company.getFlies().add(this);
+        this.airportArrival.getFlies().add(this);
+        this.airportDeparture.getFlies().add(this);
     }
+
 
     @Override
     public String toString() {
@@ -44,6 +50,7 @@ public class Fly {
                 ", company=" + company +
                 ", hour Departure=" + hourDeparture +
                 ", hour Arrival=" + hourArrival +
+                ", duration=" + getDuration() +
                 ", airport Departure=" + airportDeparture +
                 ", airport Arrival=" + airportArrival +
                 '}';
@@ -99,5 +106,22 @@ public class Fly {
 
     public void setAirportArrival(Airport airportArrival) {
         this.airportArrival = airportArrival;
+    }
+
+    public String getDuration() {
+        long minutes = ChronoUnit.MINUTES.between( this.getHourDeparture(), this.getHourArrival());
+        long hours = ChronoUnit.HOURS.between(this.getHourDeparture(),this.getHourArrival());
+
+        long modulo = minutes % 60 ;
+        if (modulo == 0){
+            return hours + "h";
+        }
+        else {
+            if (hours == 0){
+                return modulo + "min";
+            }
+            return  hours + "h" + modulo ;
+        }
+
     }
 }
