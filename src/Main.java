@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
@@ -91,6 +92,9 @@ public class Main {
                     System.out.println(flyService.getFlies());
                     System.out.println();
                     break;
+                case 4:
+                    sortFlies();
+                    System.out.println();
                 case 5:
                     System.out.println("Au revoir !");
                     break;
@@ -301,5 +305,13 @@ public class Main {
 
     }
 
+    public static void sortFlies() {
+         flyService.getFlies().sort(Fly.ComparatorPrice);
+
+        for (Fly fly :
+                flyService.getFlies()) {
+            System.out.println(fly);
+        }
+    }
 }
 

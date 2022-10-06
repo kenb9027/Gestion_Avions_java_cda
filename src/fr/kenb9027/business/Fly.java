@@ -2,6 +2,7 @@ package fr.kenb9027.business;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 
 public class Fly {
 
@@ -124,4 +125,15 @@ public class Fly {
         }
 
     }
+
+    /*
+     * Comparator pour le tri des vols par prix
+     */
+    public static Comparator<Fly> ComparatorPrice = new Comparator<Fly>() {
+
+        @Override
+        public int compare(Fly e1, Fly e2) {
+            return (int) (e2.getPrice() - e1.getPrice());
+        }
+    };
 }
