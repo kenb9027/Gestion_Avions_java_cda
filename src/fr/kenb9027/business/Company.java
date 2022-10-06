@@ -1,9 +1,11 @@
 package fr.kenb9027.business;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Company {
 
+    private static long counter = 0L;
     private String id;
     private String name;
 
@@ -11,6 +13,7 @@ public class Company {
 
     public Company() {
         super();
+        this.id = String.valueOf(++counter);
         this.flies = new ArrayList<Fly>();
     }
 

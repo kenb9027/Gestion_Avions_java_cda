@@ -17,7 +17,12 @@ public class FlyServiceImpl implements FlyService {
 
 
     @Override
-    public Fly addFly(float price, String companyId, LocalDateTime hourDeparture, LocalDateTime hourArrival, String airportDepartureId, String airportArrivalId) {
+    public Fly addFly(float price,
+                      String companyId,
+                      LocalDateTime hourDeparture,
+                      LocalDateTime hourArrival,
+                      String airportDepartureId,
+                      String airportArrivalId) {
 
         Fly newFly = new Fly();
         newFly.setPrice(price);

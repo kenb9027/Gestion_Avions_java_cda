@@ -1,10 +1,11 @@
 package fr.kenb9027.business;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Airport {
 
-
+    private static long counter = 0L;
     private String id;
     private String name;
 
@@ -12,6 +13,7 @@ public class Airport {
 
     public Airport() {
         super();
+        this.id = String.valueOf(++counter);
         this.flies = new ArrayList<Fly>();
     }
 
