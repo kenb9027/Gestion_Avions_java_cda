@@ -76,13 +76,16 @@ public class Main {
                     userAddCompany();
                     System.out.println("Liste des compagnies actualisée: ");
                     System.out.println(companies);
+                    System.out.println();
                     break;
                 case 2:
                     System.out.println("Liste des compagnies: ");
                     System.out.println(companies);
+                    System.out.println();
                     break;
                 case 3:
                     userAddFly();
+                    System.out.println();
                     break;
                 case 5:
                     System.out.println("Au revoir !");
@@ -115,7 +118,6 @@ public class Main {
         String companyName = addSc.next();
 
         companyService.addCompany(companyName);
-        addSc.close();
 
     }
 
@@ -138,33 +140,28 @@ public class Main {
         System.out.println("Choisissez une compagnie: ");
         for (Company company :
                 companies) {
-            System.out.println(company.getId() + "-" + company);
+            System.out.println(company.getId() + " - " + company);
         }
-        System.out.print("Taper son Id : ");
-        String companyIdString = addSc.next();
-        boolean isInArray = false;
-        while (!isInArray){
-            try {
+        boolean companyIsInArray = false;
+        String companyIdString = "";
+        while (!companyIsInArray){
+
+                System.out.print("Taper son Id : ");
+                companyIdString = addSc.next();
                 for (Company comp :
                         companies) {
+//                        System.out.println(comp.getId());
+//                        System.out.println(companyIdString);
                         if (comp.getId().equals(companyIdString)) {
-                            isInArray = true;
+                            companyIsInArray = true;
+                            break;
                         }
-                        else {
-                            System.err.println("Entrez un Id valable svp.");
-                            companyIdString = addSc.next(); // clear scanner wrong input
-                            continue; // continues to loop if exception is found
-                        }
+//                        else {
+//                            System.err.println("Id invalide.");
+//                        }
+
                     }
 
-                break;
-
-            } catch (NumberFormatException e) {
-                //throw new RuntimeException(e);
-                System.err.println("Entrez un Id valable svp.");
-                companyIdString = addSc.next(); // clear scanner wrong input
-                continue; // continues to loop if exception is found
-            }
         }
         companyId = companyIdString;
 
@@ -194,10 +191,39 @@ public class Main {
         }
         price = priceInt;
 
-        // AIRPORT DEPARTURE
 
-        System.out.println("companyId = " + companyId);
+        // AIRPORT DEPARTURE
+        System.out.println("Choisissez un aéroport de départ : ");
+        for (Airport airport :
+                airports) {
+            System.out.println(airport.getId() + " - " + airport);
+        }
+        boolean airportIsInArray = false;
+        String airportIdString = "";
+        while (!airportIsInArray){
+                System.out.print("Taper son Id : ");
+                airportIdString = addSc.next();
+
+                for (Airport airp :
+                        airports) {
+                    if (airp.getId().equals(airportIdString)) {
+                        airportIsInArray = true;
+                        break;
+                    }
+//                    else {
+//                        System.err.println("Id invalide.");
+//                    }
+
+                }
+        }
+        airportDepartureId = airportIdString;
+
+
+
+
+        System.out.println("company = " + companyService.getCompany(companyId));
         System.out.println("price = " + price);
+        System.out.println("Departure from " + airportService.getAirport(airportDepartureId));
 
     }
 
