@@ -8,7 +8,9 @@ import fr.kenb9027.serviceImpl.AirportServiceImpl;
 import fr.kenb9027.serviceImpl.CompanyServiceImpl;
 import fr.kenb9027.serviceImpl.FlyServiceImpl;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -86,6 +88,8 @@ public class Main {
                 case 3:
                     userAddFly();
                     System.out.println();
+                    System.out.println(flyService.getFlies());
+                    System.out.println();
                     break;
                 case 5:
                     System.out.println("Au revoir !");
@@ -145,20 +149,14 @@ public class Main {
         boolean companyIsInArray = false;
         String companyIdString = "";
         while (!companyIsInArray){
-
-                System.out.print("Taper son Id : ");
+                System.out.print("Taper l'Id d'une compagnie : ");
                 companyIdString = addSc.next();
                 for (Company comp :
                         companies) {
-//                        System.out.println(comp.getId());
-//                        System.out.println(companyIdString);
                         if (comp.getId().equals(companyIdString)) {
                             companyIsInArray = true;
                             break;
                         }
-//                        else {
-//                            System.err.println("Id invalide.");
-//                        }
 
                     }
 
@@ -218,12 +216,88 @@ public class Main {
         }
         airportDepartureId = airportIdString;
 
+        // HOUR DEPARTURE
+        boolean departureDateTimeOk = false;
+        LocalDateTime dateTime = LocalDateTime.now();
+        while (!departureDateTimeOk){
+            System.out.println("Choississez votre jour de départ : ( au format yyyy-MM-dd)");
+            String departureDate = addSc.next();
+            System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
+            String departureHour = addSc.next();
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            String departureReal = departureDate + " " + departureHour;
+    //        System.out.println(departureReal);
+            try {
+                dateTime = LocalDateTime.parse(departureReal,formatter);
+    //        System.out.println(dateTime);
+                departureDateTimeOk = true;
+                break;
+
+            } catch (Exception e) {
+    //            throw new RuntimeException(e);
+                System.out.println("Date invalide.");
+            }
+        }
+        hourDeparture = dateTime;
+
+
+        // AIRPORT ARRIVAL
+        System.out.println("Choisissez un aéroport d'arrivée : ");
+        for (Airport airport :
+                airports) {
+            System.out.println(airport.getId() + " - " + airport);
+        }
+        airportIsInArray = false;
+        airportIdString = "";
+        while (!airportIsInArray){
+            System.out.print("Taper son Id : ");
+            airportIdString = addSc.next();
+
+            for (Airport airp :
+                    airports) {
+                if (airp.getId().equals(airportIdString)) {
+                    airportIsInArray = true;
+                    break;
+                }
+            }
+        }
+        airportArrivalId = airportIdString;
+
+        // HOUR ARRIVAL
+        boolean arrivalDateTimeOk = false;
+        dateTime = LocalDateTime.now();
+        while (!arrivalDateTimeOk){
+            System.out.println("Choississez votre jour de départ : ( au format yyyy-MM-dd)");
+            String arrivalDate = addSc.next();
+            System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
+            String arrivalHour = addSc.next();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            String arrivalReal = arrivalDate + " " + arrivalHour;
+            //        System.out.println(departureReal);
+            try {
+                dateTime = LocalDateTime.parse(arrivalReal,formatter);
+                //        System.out.println(dateTime);
+                arrivalDateTimeOk = true;
+                break;
+
+            } catch (Exception e) {
+                //            throw new RuntimeException(e);
+                System.out.println("Date invalide.");
+            }
+        }
+        hourArrival = dateTime;
 
 
         System.out.println("company = " + companyService.getCompany(companyId));
-        System.out.println("price = " + price);
+        System.out.println("price = " + price +"€");
         System.out.println("Departure from " + airportService.getAirport(airportDepartureId));
+        System.out.println("at " + hourDeparture );
+        System.out.println("Arrival to " + airportService.getAirport(airportArrivalId));
+        System.out.println("at " + hourArrival );
+
+        flyService.addFly(price, companyId, hourDeparture, hourArrival, airportDepartureId, airportArrivalId);
 
     }
 
