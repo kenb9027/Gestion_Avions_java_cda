@@ -8,19 +8,17 @@ import fr.kenb9027.serviceImpl.AirportServiceImpl;
 import fr.kenb9027.serviceImpl.CompanyServiceImpl;
 import fr.kenb9027.serviceImpl.FlyServiceImpl;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
 
 
-    private static AirportService airportService = new AirportServiceImpl();
-    private static CompanyService companyService = new CompanyServiceImpl();
-    private static FlyService flyService = new FlyServiceImpl();
+    private static final AirportService airportService = new AirportServiceImpl();
+    private static final CompanyService companyService = new CompanyServiceImpl();
+    private static final FlyService flyService = new FlyServiceImpl();
 
     public static void main(String[] args) {
 
@@ -29,18 +27,17 @@ public class Main {
          //Créer et remplir 3 listes : companies , airports , flies
         ArrayList<Airport> airports = airportService.getAirports();
         ArrayList<Company> companies = companyService.getCompanies();
-        ArrayList<Fly> flies = flyService.getFlies();
 
-        airportService.addAirport("Roissy Charles de Gaulle");
+        airportService.addAirport("Roissy_Charles_de_Gaulle");
         airportService.addAirport("Heatrhow");
         airportService.addAirport("Orly");
         airportService.addAirport("St-Jacques/Rennes");
         airportService.addAirport("Mérignac/Bordeaux");
-        companyService.addCompany("Air France");
+        companyService.addCompany("Air_France");
         companyService.addCompany("RyanAir");
         companyService.addCompany("easyJet");
         companyService.addCompany("KLM");
-        companyService.addCompany("British Airways");
+        companyService.addCompany("British_Airways");
         System.out.println(airports);
         System.out.println(companies);
 
@@ -116,6 +113,7 @@ public class Main {
             System.out.println("5. Quitter");
             System.out.println("6. Voir les vols triés par durée croissante");
             System.out.println("7. Ajouter un aéroport");
+            System.out.println("8. Voir tout les aéroports");
             System.out.print("Entrez votre choix : ");
             String choice = sc1.next();
             // on redemande tant que ce n'est pas un chiffre entre 1 et 5
@@ -123,7 +121,7 @@ public class Main {
                 try {
                     choiceInt = Integer.parseInt(choice);
 
-                    if (choiceInt > 7 || choiceInt < 1){
+                    if (choiceInt > 8 || choiceInt < 1){
                         System.err.println("Entrez un nombre entre 1 et 5 svp! ");
                         choice = sc1.next(); // clear scanner wrong input
                         continue; // continues to loop if exception is found
@@ -143,25 +141,24 @@ public class Main {
                 case 1:
                     userAddCompany();
                     System.out.println("Liste des compagnies actualisée: ");
-                    System.out.println(companies);
+                    displayCompaniesList(companies);
                     System.out.println();
                     break;
                 case 2:
                     System.out.println("Liste des compagnies: ");
-                    System.out.println(companies);
+                    displayCompaniesList(companies);
                     System.out.println();
                     break;
                 case 3:
                     userAddFly();
                     System.out.println();
-                    System.out.println(flyService.getFlies());
-                    System.out.println();
                     break;
                 case 4:
-                    sortFlies();
+                    sortFliesByPrice();
                     System.out.println();
                     break;
                 case 5:
+                    System.out.println();
                     System.out.println("Au revoir !");
                     break;
                 case 6:
@@ -171,7 +168,12 @@ public class Main {
                 case 7:
                     userAddAirport();
                     System.out.println("Liste des aéroports actualisée: ");
-                    System.out.println(airports);
+                    displayAirportsList(airports);
+                    System.out.println();
+                    break;
+                case 8:
+                    System.out.println("Liste des aéroports: ");
+                    displayAirportsList(airports);
                     System.out.println();
                     break;
                 default:
@@ -180,21 +182,18 @@ public class Main {
             }
 
         }while (choiceInt != 5);
-
-
-
-        System.out.println("FIN");
-
+        System.out.println("FIN DU PROGRAMME.");
     }
+
 
     //creer les methodes pour répondre au menu
 
-
+    // ADD METHODQ
     public static void userAddCompany(){
 
         Scanner addSc = new Scanner(System.in);
 
-        System.out.println("AJOUTER UNE COMPAGNIE");
+        System.out.println("AJOUTER UNE COMPAGNIE : (pas d'espace dans le nom)");
         System.out.print("Nom: ");
         String companyName = addSc.next();
 
@@ -205,7 +204,7 @@ public class Main {
     public static void userAddAirport(){
         Scanner addSc = new Scanner(System.in);
 
-        System.out.println("AJOUTER UN AÉROPORT");
+        System.out.println("AJOUTER UN AÉROPORT : (pas d'espace dans le nom)");
         System.out.print("Nom: ");
         String airportName = addSc.next();
 
@@ -220,38 +219,86 @@ public class Main {
         LocalDateTime hourArrival = LocalDateTime.now();
         String airportDepartureId = "";
         String airportArrivalId = "";
-
         ArrayList<Company> companies = companyService.getCompanies();
         ArrayList<Airport> airports = airportService.getAirports();
-
-
-        System.out.println("AJOUTER UN VOL");
+        System.out.println("AJOUTER UN VOL : ");
 
         // COMPANY
-        System.out.println("Choisissez une compagnie: ");
-        for (Company company :
-                companies) {
-            System.out.println(company.getId() + " - " + company);
-        }
-        boolean companyIsInArray = false;
-        String companyIdString = "";
-        while (!companyIsInArray){
-                System.out.print("Taper l'Id d'une compagnie : ");
-                companyIdString = addSc.next();
-                for (Company comp :
-                        companies) {
-                        if (comp.getId().equals(companyIdString)) {
-                            companyIsInArray = true;
-                            break;
-                        }
-
-                    }
-
-        }
-        companyId = companyIdString;
-
+        companyId = askForCompany(companies, addSc);
 
         // PRICE
+        price = askForPrice(addSc);
+
+        // AIRPORT DEPARTURE
+        System.out.println("Choisissez un aéroport de départ : ");
+        airportDepartureId = askForAirport(airports, addSc);
+
+        // HOUR DEPARTURE LOCALDATETIME
+        hourDeparture = askForDateTime(addSc);
+
+        // AIRPORT ARRIVAL
+        System.out.println("Choisissez un aéroport d'arrivée : ");
+        airportArrivalId = askForAirport(airports, addSc);
+
+        // HOUR ARRIVAL LOCALDATETIME
+        hourArrival = askForDateTime(addSc) ;
+
+        System.out.println("Vol ajouté : ");
+        System.out.println("Compagnie = " + companyService.getCompany(companyId));
+        System.out.println("Prix = " + price +"€");
+        System.out.println("Départ de " + airportService.getAirport(airportDepartureId));
+        System.out.println("Arrivée à " + airportService.getAirport(airportArrivalId));
+
+        flyService.addFly(price, companyId, hourDeparture, hourArrival, airportDepartureId, airportArrivalId);
+    }
+
+    // ASK METHODS - for useAddFly()
+    public static LocalDateTime askForDateTime(Scanner addSc) {
+        boolean arrivalDateTimeOk = false;
+        LocalDateTime dateTime = LocalDateTime.now();
+        while (!arrivalDateTimeOk){
+            System.out.println("Choississez votre jour de départ : ( au format dd-MM-yyyy)");
+            String arrivalDate = addSc.next();
+            System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
+            String arrivalHour = addSc.next();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            String arrivalReal = arrivalDate + " " + arrivalHour;
+            //        System.out.println(departureReal);
+            try {
+                dateTime = LocalDateTime.parse(arrivalReal,formatter);
+                //        System.out.println(dateTime);
+                arrivalDateTimeOk = true;
+                break;
+
+            } catch (Exception e) {
+                //            throw new RuntimeException(e);
+                System.out.println("Date invalide.");
+            }
+        }
+        return dateTime;
+    }
+
+    public static String askForAirport( ArrayList<Airport> airports, Scanner addSc) {
+        displayAirportsList(airports);
+        boolean airportIsInArray = false;
+        String airportIdString = "";
+        while (!airportIsInArray){
+            System.out.print("Taper son Id : ");
+            airportIdString = addSc.next();
+
+            for (Airport airp :
+                    airports) {
+                if (airp.getId().equals(airportIdString)) {
+                    airportIsInArray = true;
+                    break;
+                }
+            }
+        }
+        return airportIdString;
+    }
+
+    public static int askForPrice(Scanner addSc) {
         System.out.print("Prix en € : ");
         String priceString = addSc.next();
         int priceInt = 0;
@@ -274,146 +321,50 @@ public class Main {
                 continue; // continues to loop if exception is found
             }
         }
-        price = priceInt;
-
-
-        // AIRPORT DEPARTURE
-        System.out.println("Choisissez un aéroport de départ : ");
-        for (Airport airport :
-                airports) {
-            System.out.println(airport.getId() + " - " + airport);
-        }
-        boolean airportIsInArray = false;
-        String airportIdString = "";
-        while (!airportIsInArray){
-                System.out.print("Taper son Id : ");
-                airportIdString = addSc.next();
-
-                for (Airport airp :
-                        airports) {
-                    if (airp.getId().equals(airportIdString)) {
-                        airportIsInArray = true;
-                        break;
-                    }
-//                    else {
-//                        System.err.println("Id invalide.");
-//                    }
-
-                }
-        }
-        airportDepartureId = airportIdString;
-
-        // HOUR DEPARTURE
-        boolean departureDateTimeOk = false;
-        LocalDateTime dateTime = LocalDateTime.now();
-        while (!departureDateTimeOk){
-            System.out.println("Choississez votre jour de départ : ( au format dd-MM-yyyy)");
-            String departureDate = addSc.next();
-            System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
-            String departureHour = addSc.next();
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            String departureReal = departureDate + " " + departureHour;
-    //        System.out.println(departureReal);
-            try {
-                dateTime = LocalDateTime.parse(departureReal,formatter);
-    //        System.out.println(dateTime);
-                departureDateTimeOk = true;
-                break;
-
-            } catch (Exception e) {
-    //            throw new RuntimeException(e);
-                System.out.println("Date invalide.");
-            }
-        }
-        hourDeparture = dateTime;
-
-
-        // AIRPORT ARRIVAL
-        System.out.println("Choisissez un aéroport d'arrivée : ");
-        for (Airport airport :
-                airports) {
-            System.out.println(airport.getId() + " - " + airport);
-        }
-        airportIsInArray = false;
-        airportIdString = "";
-        while (!airportIsInArray){
-            System.out.print("Taper son Id : ");
-            airportIdString = addSc.next();
-
-            for (Airport airp :
-                    airports) {
-                if (airp.getId().equals(airportIdString)) {
-                    airportIsInArray = true;
-                    break;
-                }
-            }
-        }
-        airportArrivalId = airportIdString;
-
-        // HOUR ARRIVAL
-        boolean arrivalDateTimeOk = false;
-        dateTime = LocalDateTime.now();
-        while (!arrivalDateTimeOk){
-            System.out.println("Choississez votre jour de départ : ( au format dd-MM-yyyy)");
-            String arrivalDate = addSc.next();
-            System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
-            String arrivalHour = addSc.next();
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            String arrivalReal = arrivalDate + " " + arrivalHour;
-            //        System.out.println(departureReal);
-            try {
-                dateTime = LocalDateTime.parse(arrivalReal,formatter);
-                //        System.out.println(dateTime);
-                arrivalDateTimeOk = true;
-                break;
-
-            } catch (Exception e) {
-                //            throw new RuntimeException(e);
-                System.out.println("Date invalide.");
-            }
-        }
-        hourArrival = dateTime;
-
-
-        System.out.println("Compagnie = " + companyService.getCompany(companyId));
-        System.out.println("Prix = " + price +"€");
-        System.out.println("Départ de " + airportService.getAirport(airportDepartureId));
-        System.out.println("Arrivée à " + airportService.getAirport(airportArrivalId));
-
-        flyService.addFly(price, companyId, hourDeparture, hourArrival, airportDepartureId, airportArrivalId);
-
+        return priceInt;
     }
 
-    public static void sortFlies() {
-        flyService.getFlies().sort(Fly.ComparatorPrice);
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH:mm");
-        for (Fly fly :
-                flyService.getFlies()) {
-            String displayFly = "";
-            displayFly += "Vol #" + fly.getNumber();
-            displayFly += " - Prix : " + fly.getPrice() + "€";
-            displayFly += " - Compagnie : " + fly.getCompany().getName();
-            displayFly += " - Départ de " + fly.getAirportDeparture();
-            displayFly += " le " + fly.getHourDeparture().format(formatterDate);
-            displayFly += " à " + fly.getHourDeparture().format(formatterHour);
-            displayFly += " - Arrivée à " + fly.getAirportArrival();
-            displayFly += " le " + fly.getHourArrival().format(formatterDate);
-            displayFly += " à " + fly.getHourArrival().format(formatterHour);
-            displayFly += " - Durée : " + fly.getDuration();
+    public static String askForCompany(ArrayList<Company> companies , Scanner addSc) {
+        System.out.println("Choisissez une compagnie: ");
+        displayCompaniesList(companies);
+        boolean companyIsInArray = false;
+        String companyIdString = "";
+        while (!companyIsInArray){
+            System.out.print("Taper l'Id d'une compagnie : ");
+            companyIdString = addSc.next();
+            for (Company comp :
+                    companies) {
+                if (comp.getId().equals(companyIdString)) {
+                    companyIsInArray = true;
+                    break;
+                }
 
-            System.out.println(displayFly);
+            }
+
         }
+
+        return companyIdString;
+    }
+
+    // SORT FLIES METHODS
+    public static void sortFliesByPrice() {
+        flyService.getFlies().sort(Fly.ComparatorPrice);
+        System.out.println("Liste des Vols triés par prix croissant : ");
+        displaySortedFlyList(flyService.getFlies());
     }
 
     public static void sortFliesByDuration() {
         flyService.getFlies().sort(Fly.ComparatorDuration);
+        System.out.println("Liste des Vols triés par durée croissante : ");
+        displaySortedFlyList(flyService.getFlies());
+    }
+
+    // DISPLAY LIST METHODS
+    public static void displaySortedFlyList(ArrayList<Fly> flylist) {
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH:mm");
         for (Fly fly :
-                flyService.getFlies()) {
+                flylist) {
             String displayFly = "";
             displayFly += "Vol #" + fly.getNumber();
             displayFly += " - Prix : " + fly.getPrice() + "€";
@@ -427,6 +378,20 @@ public class Main {
             displayFly += " - Durée : " + fly.getDuration();
 
             System.out.println(displayFly);
+        }
+    }
+
+    public static void displayAirportsList(ArrayList<Airport> airports) {
+        for (Airport airport :
+                airports) {
+            System.out.println(airport.getId() + " - " + airport);
+        }
+    }
+
+    public static void displayCompaniesList(ArrayList<Company> companies) {
+        for (Company company :
+                companies) {
+            System.out.println(company.getId() + " - " + company);
         }
     }
 }
