@@ -44,6 +44,51 @@ public class Main {
         System.out.println(airports);
         System.out.println(companies);
 
+        flyService.addFly(
+                1200 ,
+                "1",
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(98),
+                "1",
+                "2");
+        flyService.addFly(
+                450 ,
+                "2",
+                LocalDateTime.now().plusHours(5),
+                LocalDateTime.now().plusHours(7),
+                "3",
+                "4");
+        flyService.addFly(
+                2000 ,
+                "5",
+                LocalDateTime.now().plusMinutes(90),
+                LocalDateTime.now().plusMinutes(180),
+                "1",
+                "4");
+        flyService.addFly(
+                350 ,
+                "4",
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(122),
+                "4",
+                "2");
+        flyService.addFly(
+                800 ,
+                "2",
+                LocalDateTime.now().plusHours(1),
+                LocalDateTime.now().plusHours(5),
+                "3",
+                "4");
+        flyService.addFly(
+                3300 ,
+                "1",
+                LocalDateTime.now().plusMinutes(180),
+                LocalDateTime.now().plusMinutes(209),
+                "1",
+                "4");
+
+
+
         int choiceInt = 1;
 
         //tant que différent de 5, on continue le programme
@@ -109,18 +154,15 @@ public class Main {
 
         }while (choiceInt != 5);
 
-        //creer les methodes pour répondre au menu
 
 
         System.out.println("FIN");
 
     }
 
+    //creer les methodes pour répondre au menu
 
-    /**
-     * METHOD
-     * Ajouter une compagnie
-     */
+
     public static void userAddCompany(){
 
         Scanner addSc = new Scanner(System.in);
@@ -311,10 +353,23 @@ public class Main {
 
     public static void sortFlies() {
          flyService.getFlies().sort(Fly.ComparatorPrice);
-
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH:mm");
         for (Fly fly :
                 flyService.getFlies()) {
-            System.out.println(fly);
+            String displayFly = "";
+            displayFly += "Vol #" + fly.getNumber();
+            displayFly += " - Prix : " + fly.getPrice() + "€";
+            displayFly += " - Company : " + fly.getCompany().getName();
+            displayFly += " - Départ de " + fly.getAirportDeparture();
+            displayFly += " le " + fly.getHourDeparture().format(formatterDate);
+            displayFly += " à " + fly.getHourDeparture().format(formatterHour);
+            displayFly += " - Arrivée à " + fly.getAirportArrival();
+            displayFly += " le " + fly.getHourArrival().format(formatterDate);
+            displayFly += " à " + fly.getHourArrival().format(formatterHour);
+            displayFly += " - Durée : " + fly.getDuration();
+
+            System.out.println(displayFly);
         }
     }
 }

@@ -121,6 +121,10 @@ public class Fly {
             if (hours == 0){
                 return modulo + "min";
             }
+            if (modulo < 10){
+                return  hours + "h0" + modulo ;
+            }
+
             return  hours + "h" + modulo ;
         }
 
@@ -133,7 +137,7 @@ public class Fly {
 
         @Override
         public int compare(Fly e1, Fly e2) {
-            return (int) (e2.getPrice() - e1.getPrice());
+            return (int) (e1.getPrice() - e2.getPrice());
         }
     };
 }
