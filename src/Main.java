@@ -73,7 +73,7 @@ public class Main {
                 "4",
                 "2");
         flyService.addFly(
-                800 ,
+                395 ,
                 "2",
                 LocalDateTime.now().plusHours(1),
                 LocalDateTime.now().plusHours(5),
@@ -86,6 +86,20 @@ public class Main {
                 LocalDateTime.now().plusMinutes(209),
                 "1",
                 "4");
+        flyService.addFly(
+                3300 ,
+                "5",
+                LocalDateTime.now().plusMinutes(180),
+                LocalDateTime.now().plusMinutes(226),
+                "1",
+                "4");
+        flyService.addFly(
+                810 ,
+                "4",
+                LocalDateTime.now().plusMinutes(180),
+                LocalDateTime.now().plusMinutes(209),
+                "3",
+                "2");
 
 
 
@@ -340,12 +354,10 @@ public class Main {
         hourArrival = dateTime;
 
 
-        System.out.println("company = " + companyService.getCompany(companyId));
-        System.out.println("price = " + price +"€");
-        System.out.println("Departure from " + airportService.getAirport(airportDepartureId));
-        System.out.println("at " + hourDeparture );
-        System.out.println("Arrival to " + airportService.getAirport(airportArrivalId));
-        System.out.println("at " + hourArrival );
+        System.out.println("Compagnie = " + companyService.getCompany(companyId));
+        System.out.println("Prix = " + price +"€");
+        System.out.println("Départ de " + airportService.getAirport(airportDepartureId));
+        System.out.println("Arrivée à " + airportService.getAirport(airportArrivalId));
 
         flyService.addFly(price, companyId, hourDeparture, hourArrival, airportDepartureId, airportArrivalId);
 
@@ -360,7 +372,7 @@ public class Main {
             String displayFly = "";
             displayFly += "Vol #" + fly.getNumber();
             displayFly += " - Prix : " + fly.getPrice() + "€";
-            displayFly += " - Company : " + fly.getCompany().getName();
+            displayFly += " - Compagnie : " + fly.getCompany().getName();
             displayFly += " - Départ de " + fly.getAirportDeparture();
             displayFly += " le " + fly.getHourDeparture().format(formatterDate);
             displayFly += " à " + fly.getHourDeparture().format(formatterHour);
