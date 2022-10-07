@@ -140,4 +140,19 @@ public class Fly {
             return (int) (e1.getPrice() - e2.getPrice());
         }
     };
+    /*
+     * Comparator pour le tri des vols par durée
+     */
+    public static Comparator<Fly> ComparatorDuration = new Comparator<Fly>() {
+
+        @Override
+        public int compare(Fly e1, Fly e2) {
+
+            long minutesE1 = ChronoUnit.MINUTES.between( e1.getHourDeparture(), e1.getHourArrival());
+            long minutesE2 = ChronoUnit.MINUTES.between( e2.getHourDeparture(), e2.getHourArrival());
+
+            return (int) (minutesE1 - minutesE2);
+        }
+    };
+
 }

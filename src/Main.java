@@ -114,6 +114,8 @@ public class Main {
             System.out.println("3. Ajouter un vol");
             System.out.println("4. Voir les vols triés par prix croissant");
             System.out.println("5. Quitter");
+            System.out.println("6. Voir les vols triés par durée croissante");
+            System.out.println("7. Ajouter un aéroport");
             System.out.print("Entrez votre choix : ");
             String choice = sc1.next();
             // on redemande tant que ce n'est pas un chiffre entre 1 et 5
@@ -121,7 +123,7 @@ public class Main {
                 try {
                     choiceInt = Integer.parseInt(choice);
 
-                    if (choiceInt > 5 || choiceInt < 1){
+                    if (choiceInt > 7 || choiceInt < 1){
                         System.err.println("Entrez un nombre entre 1 et 5 svp! ");
                         choice = sc1.next(); // clear scanner wrong input
                         continue; // continues to loop if exception is found
@@ -158,8 +160,19 @@ public class Main {
                 case 4:
                     sortFlies();
                     System.out.println();
+                    break;
                 case 5:
                     System.out.println("Au revoir !");
+                    break;
+                case 6:
+                    sortFliesByDuration();
+                    System.out.println();
+                    break;
+                case 7:
+                    userAddAirport();
+                    System.out.println("Liste des aéroports actualisée: ");
+                    System.out.println(airports);
+                    System.out.println();
                     break;
                 default:
                     break;
@@ -187,6 +200,16 @@ public class Main {
 
         companyService.addCompany(companyName);
 
+    }
+
+    public static void userAddAirport(){
+        Scanner addSc = new Scanner(System.in);
+
+        System.out.println("AJOUTER UN AÉROPORT");
+        System.out.print("Nom: ");
+        String airportName = addSc.next();
+
+        airportService.addAirport(airportName);
     }
 
     public static void userAddFly(){
@@ -284,12 +307,12 @@ public class Main {
         boolean departureDateTimeOk = false;
         LocalDateTime dateTime = LocalDateTime.now();
         while (!departureDateTimeOk){
-            System.out.println("Choississez votre jour de départ : ( au format yyyy-MM-dd)");
+            System.out.println("Choississez votre jour de départ : ( au format dd-MM-yyyy)");
             String departureDate = addSc.next();
             System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
             String departureHour = addSc.next();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             String departureReal = departureDate + " " + departureHour;
     //        System.out.println(departureReal);
             try {
@@ -332,12 +355,12 @@ public class Main {
         boolean arrivalDateTimeOk = false;
         dateTime = LocalDateTime.now();
         while (!arrivalDateTimeOk){
-            System.out.println("Choississez votre jour de départ : ( au format yyyy-MM-dd)");
+            System.out.println("Choississez votre jour de départ : ( au format dd-MM-yyyy)");
             String arrivalDate = addSc.next();
             System.out.println("Choississez votre heure de départ : ( au format HH:mm)");
             String arrivalHour = addSc.next();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             String arrivalReal = arrivalDate + " " + arrivalHour;
             //        System.out.println(departureReal);
             try {
@@ -364,7 +387,29 @@ public class Main {
     }
 
     public static void sortFlies() {
-         flyService.getFlies().sort(Fly.ComparatorPrice);
+        flyService.getFlies().sort(Fly.ComparatorPrice);
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH:mm");
+        for (Fly fly :
+                flyService.getFlies()) {
+            String displayFly = "";
+            displayFly += "Vol #" + fly.getNumber();
+            displayFly += " - Prix : " + fly.getPrice() + "€";
+            displayFly += " - Compagnie : " + fly.getCompany().getName();
+            displayFly += " - Départ de " + fly.getAirportDeparture();
+            displayFly += " le " + fly.getHourDeparture().format(formatterDate);
+            displayFly += " à " + fly.getHourDeparture().format(formatterHour);
+            displayFly += " - Arrivée à " + fly.getAirportArrival();
+            displayFly += " le " + fly.getHourArrival().format(formatterDate);
+            displayFly += " à " + fly.getHourArrival().format(formatterHour);
+            displayFly += " - Durée : " + fly.getDuration();
+
+            System.out.println(displayFly);
+        }
+    }
+
+    public static void sortFliesByDuration() {
+        flyService.getFlies().sort(Fly.ComparatorDuration);
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH:mm");
         for (Fly fly :
