@@ -29,7 +29,7 @@ public class Main {
         ArrayList<Airport> airports = airportService.getAirports();
         ArrayList<Company> companies = companyService.getCompanies();
 
-        // create fixtures for Airports, Companies & Flies
+        // On crée des fixtures pour Airports, Companies & Flies (l'ordre est important)
         createFixturesAirports(airportService);
         createFixturesCompanies(companyService);
         createFixturesFlies(flyService);
@@ -38,11 +38,11 @@ public class Main {
     2. Affichage du menu, loop sur le programme
      */
         int choiceInt = 1;
-        //tant que différent de 5, on continue le programme
-        do {u
+        //tant que le choix est différent de 5, on continue le programme
+        do {
             displayMenu();
             String choice = sc1.next();
-            // on redemande tant que ce n'est pas un chiffre entre 1 et 5
+            // on redemande tant que ce n'est pas un chiffre entre 1 et 8 //TODO:make limit dynamic in loop
             while (true){
                 try {
                     choiceInt = Integer.parseInt(choice);
@@ -114,7 +114,12 @@ public class Main {
         3. Creer les methodes pour répondre au menu
      */
 
-    // ADD METHODS
+
+    /**
+     * ASK METHODS
+     */
+
+    //Ajouter une Compagnie
     public static void userAddCompany(){
 
         Scanner addSc = new Scanner(System.in);
@@ -127,6 +132,7 @@ public class Main {
 
     }
 
+    //Ajouter un Aéroport
     public static void userAddAirport(){
         Scanner addSc = new Scanner(System.in);
 
@@ -137,6 +143,7 @@ public class Main {
         airportService.addAirport(airportName);
     }
 
+    //Ajouter un Vol
     public static void userAddFly(){
         Scanner addSc = new Scanner(System.in);
         int price = 0;
@@ -178,7 +185,16 @@ public class Main {
         flyService.addFly(price, companyId, hourDeparture, hourArrival, airportDepartureId, airportArrivalId);
     }
 
-    // ASK METHODS - for useAddFly()
+
+    /**
+     *  ASK METHODS - for useAddFly()
+     */
+
+    /**
+     * Demande à l'utilisateur une date et une heure en 2 temps
+     * @param addSc Scanner
+     * @return LocalDateTime
+     */
     public static LocalDateTime askForDateTime(Scanner addSc) {
         boolean arrivalDateTimeOk = false;
         LocalDateTime dateTime = LocalDateTime.now();
@@ -190,21 +206,25 @@ public class Main {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             String arrivalReal = arrivalDate + " " + arrivalHour;
-            //        System.out.println(departureReal);
             try {
                 dateTime = LocalDateTime.parse(arrivalReal,formatter);
-                //        System.out.println(dateTime);
                 arrivalDateTimeOk = true;
                 break;
 
             } catch (Exception e) {
-                //            throw new RuntimeException(e);
+                // throw new RuntimeException(e);
                 System.out.println("Date invalide.");
             }
         }
         return dateTime;
     }
 
+    /**
+     * Demande à l'utilisateur de choisir un aéroport dans la liste
+     * @param airports liste des aéroports disponibles
+     * @param addSc Scanner
+     * @return id de l'aéroport choisis
+     */
     public static String askForAirport( ArrayList<Airport> airports, Scanner addSc) {
         displayAirportsList(airports);
         boolean airportIsInArray = false;
@@ -224,6 +244,11 @@ public class Main {
         return airportIdString;
     }
 
+    /**
+     * Demande un prix à l'utilisateur
+     * @param addSc Scanner
+     * @return prix en euros
+     */
     public static int askForPrice(Scanner addSc) {
         System.out.print("Prix en € : ");
         String priceString = addSc.next();
@@ -250,6 +275,12 @@ public class Main {
         return priceInt;
     }
 
+    /**
+     * Demande à l'utilisateur de choisir une compagnie
+     * @param companies liste des compagnies
+     * @param addSc Scanner
+     * @return id de la compagnie
+     */
     public static String askForCompany(ArrayList<Company> companies , Scanner addSc) {
         System.out.println("Choisissez une compagnie: ");
         displayCompaniesList(companies);
@@ -273,12 +304,19 @@ public class Main {
     }
 
     // SORT FLIES METHODS
+
+    /**
+     * Tri les vols par ordre de prix croissant
+     */
     public static void sortFliesByPrice() {
         flyService.getFlies().sort(Fly.ComparatorPrice);
         System.out.println("Liste des Vols triés par prix croissant : ");
         displaySortedFlyList(flyService.getFlies());
     }
 
+    /**
+     * Tri les vols par durée croissante
+     */
     public static void sortFliesByDuration() {
         flyService.getFlies().sort(Fly.ComparatorDuration);
         System.out.println("Liste des Vols triés par durée croissante : ");
@@ -286,6 +324,11 @@ public class Main {
     }
 
     // DISPLAY LIST METHODS
+
+    /**
+     * Affiche la liste des vols
+     * @param flylist liste des vols
+     */
     public static void displaySortedFlyList(ArrayList<Fly> flylist) {
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter formatterHour = DateTimeFormatter.ofPattern("HH:mm");
@@ -307,6 +350,10 @@ public class Main {
         }
     }
 
+    /**
+     * Affiche la liste des aéroports
+     * @param airports liste des aéroports
+     */
     public static void displayAirportsList(ArrayList<Airport> airports) {
         for (Airport airport :
                 airports) {
@@ -314,6 +361,10 @@ public class Main {
         }
     }
 
+    /**
+     * Affiche la liste des compagnies
+     * @param companies liste des compagnies
+     */
     public static void displayCompaniesList(ArrayList<Company> companies) {
         for (Company company :
                 companies) {
@@ -321,7 +372,9 @@ public class Main {
         }
     }
 
-    // DISPLAY MENU
+    /**
+     * Display Menu
+     */
     public static void displayMenu() {
         System.out.println("MENU");
         System.out.println("1. Ajouter une compagnie aérienne");
@@ -336,6 +389,7 @@ public class Main {
     }
 
     // FIXTURES
+    
     public static void createFixturesFlies(FlyService flyService) {
         flyService.addFly(
                 1200 ,
