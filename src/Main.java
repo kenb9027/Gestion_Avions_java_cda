@@ -26,13 +26,13 @@ public class Main {
     /*
     1. Créer et remplir 3 listes : companies , airports , flies
      */
-        ArrayList<Airport> airports = airportService.getAirports();
-        ArrayList<Company> companies = companyService.getCompanies();
 
         // On crée des fixtures pour Airports, Companies & Flies (l'ordre est important)
         createFixturesAirports(airportService);
         createFixturesCompanies(companyService);
         createFixturesFlies(flyService);
+        ArrayList<Airport> airports = airportService.getAirports();
+        ArrayList<Company> companies = companyService.getCompanies();
 
     /*
     2. Affichage du menu, loop sur le programme
@@ -108,11 +108,6 @@ public class Main {
         }while (choiceInt != 5);
         System.out.println("FIN DU PROGRAMME.");
     }
-
-
-    /**
-        3. Creer les methodes pour répondre au menu
-     */
 
 
     /**
@@ -389,7 +384,7 @@ public class Main {
     }
 
     // FIXTURES
-    
+
     public static void createFixturesFlies(FlyService flyService) {
         flyService.addFly(
                 1200 ,
