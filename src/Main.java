@@ -31,8 +31,7 @@ public class Main {
         createFixturesAirports(airportService);
         createFixturesCompanies(companyService);
         createFixturesFlies(flyService);
-        ArrayList<Airport> airports = airportService.getAirports();
-        ArrayList<Company> companies = companyService.getCompanies();
+
 
     /*
     2. Affichage du menu, loop sur le programme
@@ -40,6 +39,8 @@ public class Main {
         int choiceInt = 1;
         //tant que le choix est différent de 5, on continue le programme
         do {
+            ArrayList<Airport> airports = airportService.getAirports();
+            ArrayList<Company> companies = companyService.getCompanies();
             displayMenu();
             String choice = sc1.next();
             // on redemande tant que ce n'est pas un chiffre entre 1 et 8 //TODO:make limit dynamic in loop
