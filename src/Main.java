@@ -23,110 +23,34 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc1 = new Scanner(System.in);
-
-         //Créer et remplir 3 listes : companies , airports , flies
+    /*
+    1. Créer et remplir 3 listes : companies , airports , flies
+     */
         ArrayList<Airport> airports = airportService.getAirports();
         ArrayList<Company> companies = companyService.getCompanies();
 
-        airportService.addAirport("Roissy_Charles_de_Gaulle");
-        airportService.addAirport("Heatrhow");
-        airportService.addAirport("Orly");
-        airportService.addAirport("St-Jacques/Rennes");
-        airportService.addAirport("Mérignac/Bordeaux");
-        companyService.addCompany("Air_France");
-        companyService.addCompany("RyanAir");
-        companyService.addCompany("easyJet");
-        companyService.addCompany("KLM");
-        companyService.addCompany("British_Airways");
-        System.out.println(airports);
-        System.out.println(companies);
+        // create fixtures for Airports, Companies & Flies
+        createFixturesAirports(airportService);
+        createFixturesCompanies(companyService);
+        createFixturesFlies(flyService);
 
-        flyService.addFly(
-                1200 ,
-                "1",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(98),
-                "1",
-                "2");
-        flyService.addFly(
-                450 ,
-                "2",
-                LocalDateTime.now().plusHours(5),
-                LocalDateTime.now().plusHours(7),
-                "3",
-                "4");
-        flyService.addFly(
-                2000 ,
-                "5",
-                LocalDateTime.now().plusMinutes(90),
-                LocalDateTime.now().plusMinutes(180),
-                "1",
-                "4");
-        flyService.addFly(
-                350 ,
-                "4",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(122),
-                "4",
-                "2");
-        flyService.addFly(
-                395 ,
-                "2",
-                LocalDateTime.now().plusHours(1),
-                LocalDateTime.now().plusHours(5),
-                "3",
-                "4");
-        flyService.addFly(
-                3300 ,
-                "1",
-                LocalDateTime.now().plusMinutes(180),
-                LocalDateTime.now().plusMinutes(209),
-                "1",
-                "4");
-        flyService.addFly(
-                3300 ,
-                "5",
-                LocalDateTime.now().plusMinutes(180),
-                LocalDateTime.now().plusMinutes(226),
-                "1",
-                "4");
-        flyService.addFly(
-                810 ,
-                "4",
-                LocalDateTime.now().plusMinutes(180),
-                LocalDateTime.now().plusMinutes(209),
-                "3",
-                "2");
-
-
-
+    /*
+    2. Affichage du menu, loop sur le programme
+     */
         int choiceInt = 1;
-
         //tant que différent de 5, on continue le programme
-        do {
-            //Creer affichage menu
-            System.out.println("MENU");
-            System.out.println("1. Ajouter une compagnie aérienne");
-            System.out.println("2. Voir toutes les compagnies");
-            System.out.println("3. Ajouter un vol");
-            System.out.println("4. Voir les vols triés par prix croissant");
-            System.out.println("5. Quitter");
-            System.out.println("6. Voir les vols triés par durée croissante");
-            System.out.println("7. Ajouter un aéroport");
-            System.out.println("8. Voir tout les aéroports");
-            System.out.print("Entrez votre choix : ");
+        do {u
+            displayMenu();
             String choice = sc1.next();
             // on redemande tant que ce n'est pas un chiffre entre 1 et 5
             while (true){
                 try {
                     choiceInt = Integer.parseInt(choice);
-
                     if (choiceInt > 8 || choiceInt < 1){
                         System.err.println("Entrez un nombre entre 1 et 5 svp! ");
                         choice = sc1.next(); // clear scanner wrong input
                         continue; // continues to loop if exception is found
                     }
-
                     break;
 
                 } catch (NumberFormatException e) {
@@ -186,9 +110,11 @@ public class Main {
     }
 
 
-    //creer les methodes pour répondre au menu
+    /**
+        3. Creer les methodes pour répondre au menu
+     */
 
-    // ADD METHODQ
+    // ADD METHODS
     public static void userAddCompany(){
 
         Scanner addSc = new Scanner(System.in);
@@ -393,6 +319,96 @@ public class Main {
                 companies) {
             System.out.println(company.getId() + " - " + company);
         }
+    }
+
+    // DISPLAY MENU
+    public static void displayMenu() {
+        System.out.println("MENU");
+        System.out.println("1. Ajouter une compagnie aérienne");
+        System.out.println("2. Voir toutes les compagnies");
+        System.out.println("3. Ajouter un vol");
+        System.out.println("4. Voir les vols triés par prix croissant");
+        System.out.println("5. Quitter");
+        System.out.println("6. Voir les vols triés par durée croissante");
+        System.out.println("7. Ajouter un aéroport");
+        System.out.println("8. Voir tout les aéroports");
+        System.out.print("Entrez votre choix : ");
+    }
+
+    // FIXTURES
+    public static void createFixturesFlies(FlyService flyService) {
+        flyService.addFly(
+                1200 ,
+                "1",
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(98),
+                "1",
+                "2");
+        flyService.addFly(
+                450 ,
+                "2",
+                LocalDateTime.now().plusHours(5),
+                LocalDateTime.now().plusHours(7),
+                "3",
+                "4");
+        flyService.addFly(
+                2000 ,
+                "5",
+                LocalDateTime.now().plusMinutes(90),
+                LocalDateTime.now().plusMinutes(180),
+                "1",
+                "4");
+        flyService.addFly(
+                350 ,
+                "4",
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(122),
+                "4",
+                "2");
+        flyService.addFly(
+                395 ,
+                "2",
+                LocalDateTime.now().plusHours(1),
+                LocalDateTime.now().plusHours(5),
+                "3",
+                "4");
+        flyService.addFly(
+                3300 ,
+                "1",
+                LocalDateTime.now().plusMinutes(180),
+                LocalDateTime.now().plusMinutes(209),
+                "1",
+                "4");
+        flyService.addFly(
+                3300 ,
+                "5",
+                LocalDateTime.now().plusMinutes(180),
+                LocalDateTime.now().plusMinutes(226),
+                "1",
+                "4");
+        flyService.addFly(
+                810 ,
+                "4",
+                LocalDateTime.now().plusMinutes(180),
+                LocalDateTime.now().plusMinutes(209),
+                "3",
+                "2");
+    }
+
+    public static void createFixturesAirports(AirportService airportService) {
+        airportService.addAirport("Roissy_Charles_de_Gaulle");
+        airportService.addAirport("Heatrhow");
+        airportService.addAirport("Orly");
+        airportService.addAirport("St-Jacques/Rennes");
+        airportService.addAirport("Mérignac/Bordeaux");
+    }
+
+    public static void createFixturesCompanies(CompanyService companyService) {
+        companyService.addCompany("Air_France");
+        companyService.addCompany("RyanAir");
+        companyService.addCompany("easyJet");
+        companyService.addCompany("KLM");
+        companyService.addCompany("British_Airways");
     }
 }
 
